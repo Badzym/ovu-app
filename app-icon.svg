@@ -1,0 +1,37 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d2d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="camera" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007bff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0056b3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg)" rx="80" ry="80"/>
+  
+  <!-- Camera body -->
+  <rect x="156" y="200" width="200" height="140" rx="20" ry="20" fill="url(#camera)" stroke="#ffffff" stroke-width="4"/>
+  
+  <!-- Camera lens -->
+  <circle cx="256" cy="270" r="40" fill="#ffffff" opacity="0.9"/>
+  <circle cx="256" cy="270" r="30" fill="url(#camera)"/>
+  <circle cx="256" cy="270" r="20" fill="#ffffff" opacity="0.8"/>
+  
+  <!-- Camera flash -->
+  <rect x="186" y="180" width="20" height="15" rx="5" ry="5" fill="#ffffff" opacity="0.7"/>
+  
+  <!-- Overlay effect (semi-transparent rectangle) -->
+  <rect x="120" y="160" width="272" height="180" rx="25" ry="25" fill="#ffffff" opacity="0.1" stroke="#007bff" stroke-width="3"/>
+  
+  <!-- Tracing lines effect -->
+  <line x1="140" y1="200" x2="180" y2="200" stroke="#007bff" stroke-width="2" opacity="0.6"/>
+  <line x1="140" y1="220" x2="180" y2="220" stroke="#007bff" stroke-width="2" opacity="0.6"/>
+  <line x1="140" y1="240" x2="180" y2="240" stroke="#007bff" stroke-width="2" opacity="0.6"/>
+  
+  <!-- App name -->
+  <text x="256" y="420" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="#ffffff">OVU</text>
+</svg>
