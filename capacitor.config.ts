@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ovu-app',
+  appId: 'com.badzym.ovu',
+  appName: 'Ovu',
   webDir: 'www',
   plugins: {
     Camera: {
@@ -10,13 +10,13 @@ const config: CapacitorConfig = {
     },
     SplashScreen: {
       launchShowDuration: 3000,
-      backgroundColor: "#ffffffff",
+      backgroundColor: "#1a1a1a",
       androidSplashResourceName: "splash",
       androidScaleType: "CENTER_CROP",
       showSpinner: true,
       androidSpinnerStyle: "large",
       iosSpinnerStyle: "small",
-      spinnerColor: "#999999",
+      spinnerColor: "#007bff",
       splashFullScreen: true,
       splashImmersive: true,
       layoutName: "launch_screen",
@@ -24,7 +24,7 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       style: "dark",
-      backgroundColor: "#ffffff"
+      backgroundColor: "#1a1a1a"
     }
   },
   android: {

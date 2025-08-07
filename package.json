@@ -1,8 +1,9 @@
 {
-  "name": "ovu-app",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "name": "ovu",
+  "version": "1.0.0",
+  "author": "Badzym",
+  "homepage": "https://github.com/Badzym/ovu-app",
+  "description": "Ovu - Camera overlay app for image tracing and drawing. Perfect for artists, designers, and anyone who needs to trace images with precision.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -64,6 +65,5 @@
     "string-replace-loader": "^3.2.0",
     "typescript": "~5.8.0",
     "webpack-merge": "^6.0.1"
-  },
-  "description": "An Ionic project"
+  }
 }

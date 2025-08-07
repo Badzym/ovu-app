@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ovu</string>
+    <string name="title_activity_main">Ovu</string>
+    <string name="package_name">com.badzym.ovu</string>
+    <string name="custom_url_scheme">com.badzym.ovu</string>
+</resources>
