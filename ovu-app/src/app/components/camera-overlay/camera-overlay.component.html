@@ -1,0 +1,119 @@
+<div class="app-container">
+  <!-- Header with image controls and buttons -->
+  <div class="header">
+    <div class="header-content">
+      <!-- Image controls - only show when image is selected -->
+      <div class="image-controls" *ngIf="selectedImage">
+        <h3>🖼️ Image Controls</h3>
+        <div class="header-controls">
+          <div class="control-group">
+            <label for="opacity-slider">Opacity: {{ (imageOpacity * 100) | number:'1.0-0' }}%</label>
+            <input 
+              type="range" 
+              id="opacity-slider"
+              min="0" 
+              max="1" 
+              step="0.1"
+              [value]="imageOpacity"
+              (input)="updateOpacity($event)"
+              class="control-slider">
+          </div>
+
+          <div class="control-group">
+            <label for="rotation-slider">Rotation: {{ imageRotation }}°</label>
+            <input 
+              type="range" 
+              id="rotation-slider"
+              min="0" 
+              max="360" 
+              step="1"
+              [value]="imageRotation"
+              (input)="updateRotation($event)"
+              class="control-slider">
+          </div>
+
+          <div class="control-group">
+            <label for="scale-slider">Scale: {{ imageScale | number:'1.1-1' }}x</label>
+            <input 
+              type="range" 
+              id="scale-slider"
+              min="0.1" 
+              max="5" 
+              step="0.1"
+              [value]="imageScale"
+              (input)="updateScale($event)"
+              class="control-slider">
+          </div>
+
+          <div class="header-buttons">
+            <button class="btn btn-sm btn-warning" (click)="resetImage()">
+              🔄 Reset
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="clearImage()">
+              ❌ Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main action buttons - always visible -->
+      <div class="main-buttons">
+        <button class="btn btn-sm" 
+                [class.btn-primary]="!isCameraActive" 
+                [class.btn-success]="isCameraActive"
+                (click)="startCamera()">
+          {{ isCameraActive ? '📷 Stop' : '📷 Start' }}
+        </button>
+        
+        <button class="btn btn-sm btn-secondary" (click)="triggerFileInput()">
+          🖼️ Add Image
+        </button>
+        
+        <input 
+          #fileInput
+          type="file" 
+          accept="image/*" 
+          (change)="onFileSelected($event)"
+          style="display: none;">
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content area -->
+  <div class="main-content">
+    <!-- Camera and image overlay area - ALWAYS SHOWN -->
+    <div class="camera-overlay-container">
+      <!-- Camera feed area -->
+      <div class="camera-container">
+        <div class="camera-wrapper">
+          <video #videoElement autoplay playsinline muted class="camera-video"></video>
+          
+          <!-- Camera placeholder overlay - hidden when camera is active or image is selected -->
+          <div class="camera-placeholder-overlay" 
+               *ngIf="!isCameraActive"
+               (click)="startCamera()">
+            <div class="placeholder-content">
+              <div class="camera-icon">📷</div>
+              <h3>Camera Not Active</h3>
+              <p>Tap to start camera</p>
+            </div>
+          </div>
+          
+          <div class="image-overlay" *ngIf="selectedImage"
+               (touchstart)="onTouchStart($event)"
+               (touchmove)="onTouchMove($event)"
+               (touchend)="onTouchEnd($event)"
+               (mousedown)="onMouseDown($event)"
+               (mousemove)="onMouseMove($event)"
+               (mouseup)="onMouseUp()">
+            <img [src]="selectedImage"
+                 [style.opacity]="imageOpacity"
+                 [style.transform]="'translate(-50%, -50%) translate(' + imagePosition.x + 'px, ' + imagePosition.y + 'px) rotate(' + imageRotation + 'deg) scale(' + imageScale + ')'"
+                 alt="Selected image for tracing"
+                 class="tracing-image">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

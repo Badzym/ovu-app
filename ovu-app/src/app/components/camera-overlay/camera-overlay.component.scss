@@ -1,0 +1,398 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #1a1a1a;
+  /* Full screen mode - go over status bar */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 10000 !important;
+  /* Remove any safe area padding */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.header {
+  background: #2d2d2d;
+  border-bottom: 2px solid #444;
+  padding: 10px 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  flex-shrink: 0;
+  /* Add status bar height padding */
+  padding-top: calc(40px + env(safe-area-inset-top, 0px)) !important;
+  
+  .header-content {
+    .image-controls {
+      margin-bottom: 10px;
+      
+      h3 {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+        color: #ffffff;
+      }
+      
+      .header-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        
+        .control-group {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 5px;
+          min-width: 140px;
+          
+          label {
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 12px;
+            white-space: nowrap;
+          }
+          
+          .control-slider {
+            width: 120px;
+            height: 4px;
+            border-radius: 2px;
+            background: #555;
+            outline: none;
+            -webkit-appearance: none;
+            
+            &::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              appearance: none;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              background: #007bff;
+              cursor: pointer;
+            }
+            
+            &::-moz-range-thumb {
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              background: #007bff;
+              cursor: pointer;
+              border: none;
+            }
+          }
+        }
+        
+        .header-buttons {
+          display: flex;
+          gap: 8px;
+          
+          .btn-sm {
+            padding: 6px 12px;
+            font-size: 11px;
+            min-height: 28px;
+          }
+        }
+      }
+    }
+    
+    .main-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      
+      .btn-sm {
+        padding: 8px 16px;
+        font-size: 12px;
+        min-height: 32px;
+        flex: 1;
+        max-width: 120px;
+      }
+    }
+  }
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+  background-color: #1a1a1a;
+}
+
+.top-text {
+  h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0.3rem 0;
+  }
+}
+
+.camera-overlay-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.camera-container {
+  width: 100%;
+  height: 100%;
+  background: #2d2d2d;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  
+  .camera-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    
+    .camera-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #333;
+      display: block;
+      
+      // Show neutral placeholder when camera is not active
+      &:not([srcObject]) {
+        background: linear-gradient(45deg, #333 25%, transparent 25%), 
+                    linear-gradient(-45deg, #333 25%, transparent 25%), 
+                    linear-gradient(45deg, transparent 75%, #333 75%), 
+                    linear-gradient(-45deg, transparent 75%, #333 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        position: relative;
+        
+        &::after {
+          content: '📷 Camera not active';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #888;
+          font-size: 16px;
+          text-align: center;
+        }
+      }
+    }
+    
+    .camera-placeholder-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 15;
+      
+      &:hover {
+        background: linear-gradient(135deg, #3d3d3d 0%, #2a2a2a 100%);
+        transform: scale(1.02);
+      }
+      
+      &:active {
+        transform: scale(0.98);
+      }
+      
+      .placeholder-content {
+        text-align: center;
+        color: #ffffff;
+        padding: 20px;
+        
+        .camera-icon {
+          font-size: 48px;
+          margin-bottom: 15px;
+          opacity: 0.8;
+        }
+        
+        h3 {
+          margin: 0 0 10px 0;
+          font-size: 18px;
+          font-weight: 600;
+          color: #ffffff;
+        }
+        
+        p {
+          margin: 0 0 20px 0;
+          font-size: 14px;
+          color: #cccccc;
+          opacity: 0.8;
+        }
+        
+        .btn {
+          margin-top: 10px;
+          background: #007bff;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+          }
+          
+          &:active {
+            transform: translateY(0);
+          }
+        }
+      }
+    }
+    
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+      cursor: move;
+      user-select: none;
+      -webkit-user-select: none;
+      z-index: 20;
+      
+      .tracing-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: center;
+        max-width: 80%;
+        max-height: 80%;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+.footer {
+  background: white;
+  border-top: 2px solid #ddd;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 50px;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 32px;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  
+  &:hover {
+    background-color: #545b62;
+  }
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  
+  &:hover {
+    background-color: #c82333;
+  }
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+  
+  &:hover {
+    background-color: #e0a800;
+  }
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  color: white;
+  
+  &:hover {
+    background-color: #138496;
+  }
+}
