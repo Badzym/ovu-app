@@ -1,158 +1,176 @@
-<div class="camera-container">
-  <!-- Camera View -->
-  <div class="camera-view">
-    <video 
-      #videoElement 
-      autoplay 
-      playsinline 
-      muted
-      [class.active]="isCameraActive"
-      class="camera-video">
-    </video>
-    
-    <!-- Drawing Canvas -->
-    <canvas 
-      #canvasElement 
-      class="drawing-canvas"
-      [class.active]="isDrawingMode">
-    </canvas>
-    
-    <!-- Overlay Images -->
-    <div class="overlay-container">
-      <div 
-        *ngFor="let overlay of overlayImages" 
-        class="overlay-image"
-        [style.left.px]="overlay.position.x"
-        [style.top.px]="overlay.position.y"
-        [style.transform]="'scale(' + overlay.scale + ') rotate(' + overlay.rotation + 'deg)'"
-        [style.opacity]="overlay.opacity"
-        [class.selected]="selectedOverlay?.id === overlay.id"
-        (click)="selectOverlay(overlay)">
-        <img [src]="overlay.src" alt="Overlay">
-        <button 
-          class="remove-overlay" 
-          (click)="removeOverlay(overlay)"
-          title="Remove overlay">
-          ×
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Controls -->
-  <div class="controls">
-    <!-- Camera Controls -->
-    <div class="camera-controls">
-      <button 
-        class="control-btn primary"
-        (click)="isCameraActive ? stopCamera() : startCamera()">
-        {{ isCameraActive ? 'Stop Camera' : 'Start Camera' }}
-      </button>
-    </div>
-
-    <!-- Overlay Controls -->
-    <div class="overlay-controls" *ngIf="overlayImages.length > 0">
-      <h3>Overlay Controls</h3>
+<ion-app>
+  <ion-content class="camera-container">
+    <!-- Camera View -->
+    <div class="camera-view">
+      <video 
+        #videoElement 
+        autoplay 
+        playsinline 
+        muted
+        [class.active]="isCameraActive"
+        class="camera-video">
+      </video>
       
-      <div class="overlay-list">
+      <!-- Drawing Canvas -->
+      <canvas 
+        #canvasElement 
+        class="drawing-canvas"
+        [class.active]="isDrawingMode">
+      </canvas>
+      
+      <!-- Overlay Images -->
+      <div class="overlay-container">
         <div 
           *ngFor="let overlay of overlayImages" 
-          class="overlay-item"
+          class="overlay-image"
+          [style.left.px]="overlay.position.x"
+          [style.top.px]="overlay.position.y"
+          [style.transform]="'scale(' + overlay.scale + ') rotate(' + overlay.rotation + 'deg)'"
+          [style.opacity]="overlay.opacity"
           [class.selected]="selectedOverlay?.id === overlay.id"
           (click)="selectOverlay(overlay)">
-          <img [src]="overlay.src" alt="Thumbnail">
-          <span>{{ overlay.id }}</span>
+          <img [src]="overlay.src" alt="Overlay">
+          <ion-button 
+            class="remove-overlay" 
+            fill="clear"
+            size="small"
+            (click)="removeOverlay(overlay)"
+            title="Remove overlay">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
         </div>
       </div>
+    </div>
 
-      <!-- Selected Overlay Controls -->
-      <div class="selected-overlay-controls" *ngIf="selectedOverlay">
-        <h4>Adjust Overlay</h4>
+    <!-- Controls -->
+    <ion-footer class="controls">
+      <!-- Camera Controls -->
+      <ion-toolbar>
+        <ion-buttons slot="center">
+          <ion-button 
+            [color]="isCameraActive ? 'danger' : 'primary'"
+            (click)="isCameraActive ? stopCamera() : startCamera()">
+            <ion-icon [name]="isCameraActive ? 'stop' : 'camera'"></ion-icon>
+            {{ isCameraActive ? 'Stop Camera' : 'Start Camera' }}
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <!-- Overlay Controls -->
+      <ion-card *ngIf="overlayImages.length > 0">
+        <ion-card-header>
+          <ion-card-title>Overlay Controls</ion-card-title>
+        </ion-card-header>
         
-        <div class="control-group">
-          <label>Opacity:</label>
-          <input 
-            type="range" 
-            min="0" 
-            max="1" 
-            step="0.1"
-            [value]="selectedOverlay.opacity"
-            (input)="updateOverlayOpacity(selectedOverlay, $event.target.value)">
-          <span>{{ (selectedOverlay.opacity * 100) | number:'1.0-0' }}%</span>
-        </div>
+        <ion-card-content>
+          <ion-segment scrollable>
+            <ion-segment-button 
+              *ngFor="let overlay of overlayImages"
+              [value]="overlay.id"
+              [class.selected]="selectedOverlay?.id === overlay.id"
+              (click)="selectOverlay(overlay)">
+              <ion-thumbnail>
+                <img [src]="overlay.src" alt="Thumbnail">
+              </ion-thumbnail>
+            </ion-segment-button>
+          </ion-segment>
 
-        <div class="control-group">
-          <label>Scale:</label>
-          <input 
-            type="range" 
-            min="0.1" 
-            max="3" 
-            step="0.1"
-            [value]="selectedOverlay.scale"
-            (input)="updateOverlayScale(selectedOverlay, $event.target.value)">
-          <span>{{ selectedOverlay.scale | number:'1.1-1' }}x</span>
-        </div>
+          <!-- Selected Overlay Controls -->
+          <div class="selected-overlay-controls" *ngIf="selectedOverlay">
+            <ion-card-subtitle>Adjust Overlay</ion-card-subtitle>
+            
+            <ion-item>
+              <ion-label>Opacity: {{ (selectedOverlay.opacity * 100) | number:'1.0-0' }}%</ion-label>
+              <ion-range 
+                [value]="selectedOverlay.opacity"
+                min="0" 
+                max="1" 
+                step="0.1"
+                (ionChange)="updateOverlayOpacity(selectedOverlay, $event.detail.value)">
+              </ion-range>
+            </ion-item>
 
-        <div class="control-group">
-          <label>Rotation:</label>
-          <input 
-            type="range" 
-            min="0" 
-            max="360" 
-            step="1"
-            [value]="selectedOverlay.rotation"
-            (input)="updateOverlayRotation(selectedOverlay, $event.target.value)">
-          <span>{{ selectedOverlay.rotation }}°</span>
-        </div>
+            <ion-item>
+              <ion-label>Scale: {{ selectedOverlay.scale | number:'1.1-1' }}x</ion-label>
+              <ion-range 
+                [value]="selectedOverlay.scale"
+                min="0.1" 
+                max="3" 
+                step="0.1"
+                (ionChange)="updateOverlayScale(selectedOverlay, $event.detail.value)">
+              </ion-range>
+            </ion-item>
 
-        <div class="position-controls">
-          <label>Position:</label>
-          <div class="position-inputs">
-            <input 
-              type="number" 
-              placeholder="X"
-              [value]="selectedOverlay.position.x"
-              (input)="updateOverlayPosition(selectedOverlay, $event.target.value, selectedOverlay.position.y)">
-            <input 
-              type="number" 
-              placeholder="Y"
-              [value]="selectedOverlay.position.y"
-              (input)="updateOverlayPosition(selectedOverlay, selectedOverlay.position.x, $event.target.value)">
+            <ion-item>
+              <ion-label>Rotation: {{ selectedOverlay.rotation }}°</ion-label>
+              <ion-range 
+                [value]="selectedOverlay.rotation"
+                min="0" 
+                max="360" 
+                step="1"
+                (ionChange)="updateOverlayRotation(selectedOverlay, $event.detail.value)">
+              </ion-range>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Position X</ion-label>
+              <ion-input 
+                type="number" 
+                [value]="selectedOverlay.position.x"
+                (ionInput)="updateOverlayPosition(selectedOverlay, $event.detail.value, selectedOverlay.position.y)">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Position Y</ion-label>
+              <ion-input 
+                type="number" 
+                [value]="selectedOverlay.position.y"
+                (ionInput)="updateOverlayPosition(selectedOverlay, selectedOverlay.position.x, $event.detail.value)">
+              </ion-input>
+            </ion-item>
           </div>
-        </div>
-      </div>
-    </div>
+        </ion-card-content>
+      </ion-card>
 
-    <!-- Drawing Controls -->
-    <div class="drawing-controls">
-      <button 
-        class="control-btn"
-        [class.active]="isDrawingMode"
-        (click)="toggleDrawingMode()">
-        {{ isDrawingMode ? 'Disable Drawing' : 'Enable Drawing' }}
-      </button>
-      
-      <button 
-        class="control-btn"
-        (click)="clearDrawing()"
-        *ngIf="isDrawingMode">
-        Clear Drawing
-      </button>
-    </div>
+      <!-- Drawing Controls -->
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button 
+            [color]="isDrawingMode ? 'success' : 'medium'"
+            (click)="toggleDrawingMode()">
+            <ion-icon [name]="isDrawingMode ? 'pencil' : 'pencil-outline'"></ion-icon>
+            {{ isDrawingMode ? 'Disable Drawing' : 'Enable Drawing' }}
+          </ion-button>
+        </ion-buttons>
+        
+        <ion-buttons slot="end" *ngIf="isDrawingMode">
+          <ion-button 
+            color="warning"
+            (click)="clearDrawing()">
+            <ion-icon name="trash"></ion-icon>
+            Clear Drawing
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
 
-    <!-- Add Overlay -->
-    <div class="add-overlay">
-      <button 
-        class="control-btn secondary"
-        (click)="triggerFileInput()">
-        Add Overlay Image
-      </button>
-      <input 
-        #fileInput
-        type="file" 
-        accept="image/*" 
-        (change)="onFileSelected($event)"
-        style="display: none;">
-    </div>
-  </div>
-</div>
+      <!-- Add Overlay -->
+      <ion-toolbar>
+        <ion-buttons slot="center">
+          <ion-button 
+            color="secondary"
+            (click)="triggerFileInput()">
+            <ion-icon name="add"></ion-icon>
+            Add Overlay Image
+          </ion-button>
+          <input 
+            #fileInput
+            type="file" 
+            accept="image/*" 
+            (change)="onFileSelected($event)"
+            style="display: none;">
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-content>
+</ion-app>

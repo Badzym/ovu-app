@@ -1,15 +1,12 @@
 .camera-container {
-  display: flex;
-  flex-direction: column;
+  --background: #000;
   height: 100vh;
-  background: #000;
   color: white;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .camera-view {
   position: relative;
-  flex: 1;
+  height: 100%;
   background: #000;
   overflow: hidden;
 }
@@ -69,7 +66,7 @@
   
   &.selected {
     img {
-      border: 3px solid #00ff88;
+      border: 3px solid var(--ion-color-success);
       box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
     }
   }
@@ -78,32 +75,27 @@
     position: absolute;
     top: -10px;
     right: -10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #ff4444;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --background: var(--ion-color-danger);
+    --color: white;
+    --border-radius: 50%;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    min-width: 24px;
+    min-height: 24px;
     
     &:hover {
-      background: #ff6666;
+      --background: var(--ion-color-danger-shade);
       transform: scale(1.1);
     }
   }
 }
 
 .controls {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  padding: 20px;
+  --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   border-top: 1px solid #333;
-  max-height: 40vh;
+  max-height: 50vh;
   overflow-y: auto;
 }
 
@@ -226,9 +218,9 @@
 
 .selected-overlay-controls {
   background: rgba(255, 255, 255, 0.05);
-  padding: 15px;
   border-radius: 8px;
-  margin-bottom: 15px;
+  margin: 10px 0;
+  padding: 10px;
 }
 
 .control-group {
@@ -315,6 +307,89 @@
   text-align: center;
 }
 
+// Ionic specific overrides
+ion-card {
+  --background: rgba(255, 255, 255, 0.1);
+  --color: white;
+  margin: 10px;
+}
+
+ion-card-header {
+  --background: transparent;
+}
+
+ion-card-title {
+  --color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+ion-card-subtitle {
+  --color: #ccc;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+ion-segment {
+  --background: rgba(255, 255, 255, 0.1);
+}
+
+ion-segment-button {
+  --background-checked: var(--ion-color-primary);
+  --color-checked: white;
+  --color: #ccc;
+  
+  &.selected {
+    --background: var(--ion-color-primary);
+    --color: white;
+  }
+}
+
+ion-thumbnail {
+  width: 60px;
+  height: 60px;
+  
+  img {
+    border-radius: 4px;
+    border: 2px solid transparent;
+  }
+}
+
+ion-item {
+  --background: transparent;
+  --color: white;
+  --border-color: rgba(255, 255, 255, 0.2);
+}
+
+ion-label {
+  --color: #ccc;
+}
+
+ion-range {
+  --bar-background: #444;
+  --bar-background-active: var(--ion-color-primary);
+  --knob-background: var(--ion-color-primary);
+}
+
+ion-input {
+  --color: white;
+  --placeholder-color: #666;
+}
+
+ion-button {
+  --border-radius: 8px;
+  font-weight: 600;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+ion-toolbar {
+  --background: transparent;
+  --border-color: rgba(255, 255, 255, 0.2);
+}
+
 // Mobile responsive design
 @media (max-width: 768px) {
   .camera-container {
@@ -322,55 +397,23 @@
   }
   
   .controls {
-    max-height: 35vh;
-    padding: 15px;
+    max-height: 40vh;
   }
   
-  .control-btn {
-    padding: 10px 20px;
-    font-size: 13px;
+  ion-thumbnail {
+    width: 50px;
+    height: 50px;
   }
   
-  .overlay-list {
-    .overlay-item {
-      min-width: 70px;
-      
-      img {
-        width: 50px;
-        height: 50px;
-      }
-      
-      span {
-        font-size: 11px;
-      }
-    }
-  }
-  
-  .control-group {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-    
-    label {
-      min-width: auto;
-    }
-    
-    input[type="range"] {
-      width: 100%;
-    }
-  }
-  
-  .position-controls {
-    .position-inputs {
-      flex-direction: column;
-    }
+  ion-card {
+    margin: 5px;
   }
 }
 
 // Dark theme enhancements
 @media (prefers-color-scheme: dark) {
   .controls {
-    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    --background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
   }
 }
 
@@ -388,4 +431,33 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+// Ionic status bar and safe area handling
+ion-content {
+  --padding-top: env(safe-area-inset-top);
+  --padding-bottom: env(safe-area-inset-bottom);
+  --padding-start: env(safe-area-inset-left);
+  --padding-end: env(safe-area-inset-right);
+}
+
+// Full screen camera view
+.camera-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+// Controls overlay
+ion-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-top: 1px solid #333;
 }

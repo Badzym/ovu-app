@@ -1,6 +1,6 @@
-# Ovu - Camera Overlay Drawing App
+# Ovu - Camera Overlay Drawing Mobile App
 
-A mobile-friendly Angular application that enables camera access with overlay image functionality and drawing capabilities. Perfect for artists and designers who want to trace or draw over reference images using their phone's camera.
+A mobile application built with Ionic and Angular that enables camera access with overlay image functionality and drawing capabilities. Perfect for artists and designers who want to trace or draw over reference images using their phone's camera.
 
 ## Features
 
@@ -23,38 +23,29 @@ A mobile-friendly Angular application that enables camera access with overlay im
 - Drawing mode toggle
 
 ### 📱 Mobile Optimized
-- Responsive design for mobile devices
-- Touch-friendly controls
+- Native mobile app experience
+- Touch-friendly Ionic UI components
 - Full-screen camera view
 - Optimized for phone usage
-
-## How It Works
-
-1. **Start Camera**: Tap "Start Camera" to access your device's camera
-2. **Add Overlay**: Click "Add Overlay Image" to select an image from your device
-3. **Position Overlay**: Use the controls to adjust opacity, scale, rotation, and position
-4. **Enable Drawing**: Toggle drawing mode to draw over the camera view
-5. **Trace Away**: Hold your phone over your reference image and start drawing!
-
-## Perfect For
-- Artists tracing reference images
-- Designers working with overlays
-- Anyone needing to draw over real-world objects
-- Educational purposes for drawing tutorials
+- Can be published to app stores
 
 ## Technology Stack
 
 - **Framework**: Angular 17 with TypeScript
-- **Styling**: SCSS with modern CSS features
+- **Mobile Framework**: Ionic 7
+- **Native Build**: Capacitor 5
+- **Styling**: SCSS with Ionic components
 - **Camera API**: WebRTC getUserMedia
 - **Drawing**: HTML5 Canvas API
-- **Mobile**: Responsive design with touch support
+- **Mobile**: Native Android/iOS apps
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js (version 18 or higher)
 - npm or yarn package manager
+- Android Studio (for Android development)
+- Xcode (for iOS development, macOS only)
 
 ### Installation
 
@@ -77,19 +68,79 @@ A mobile-friendly Angular application that enables camera access with overlay im
 4. **Open in browser**
    Navigate to `http://localhost:4200`
 
+### Building for Mobile
+
+#### Android Development
+
+1. **Build the web app**
+   ```bash
+   ng build
+   ```
+
+2. **Sync with Capacitor**
+   ```bash
+   npx cap sync
+   ```
+
+3. **Open in Android Studio**
+   ```bash
+   npx cap open android
+   ```
+
+4. **Build and run on device/emulator**
+   - Open Android Studio
+   - Connect your Android device or start an emulator
+   - Click "Run" to build and install the app
+
+#### iOS Development (macOS only)
+
+1. **Build the web app**
+   ```bash
+   ng build
+   ```
+
+2. **Sync with Capacitor**
+   ```bash
+   npx cap sync
+   ```
+
+3. **Open in Xcode**
+   ```bash
+   npx cap open ios
+   ```
+
+4. **Build and run on device/simulator**
+   - Open Xcode
+   - Connect your iOS device or start a simulator
+   - Click "Run" to build and install the app
+
 ### Building for Production
 
+#### Android APK
 ```bash
-ng build
+# In Android Studio
+Build → Build Bundle(s) / APK(s) → Build APK(s)
 ```
 
-### Running on Mobile
+#### iOS App Store
+```bash
+# In Xcode
+Product → Archive
+```
 
-For the best experience on mobile devices:
+## How It Works
 
-1. **Enable HTTPS** (required for camera access)
-2. **Use a mobile browser** (Chrome, Safari, Firefox)
-3. **Grant camera permissions** when prompted
+1. **Start Camera**: Tap "Start Camera" to access your device's camera
+2. **Add Overlay**: Click "Add Overlay Image" to select an image from your device
+3. **Position Overlay**: Use the controls to adjust opacity, scale, rotation, and position
+4. **Enable Drawing**: Toggle drawing mode to draw over the camera view
+5. **Trace Away**: Hold your phone over your reference image and start drawing!
+
+## Perfect For
+- Artists tracing reference images
+- Designers working with overlays
+- Anyone needing to draw over real-world objects
+- Educational purposes for drawing tutorials
 
 ## Development
 
@@ -103,6 +154,8 @@ src/
 │   │   └── camera.ts                # Camera and overlay logic
 │   ├── app.component.ts             # Main app component
 │   └── app.component.html           # Main app template
+android/                              # Android native project
+ios/                                  # iOS native project
 ```
 
 ### Key Components
@@ -112,11 +165,25 @@ src/
 
 ### Adding Features
 
-The app is built with Angular's standalone components, making it easy to extend:
+The app is built with Angular's standalone components and Ionic, making it easy to extend:
 
 1. Create new components: `ng generate component components/your-component`
 2. Create new services: `ng generate service services/your-service`
-3. Add to main app: Import and include in app.component.ts
+3. Add Ionic components: Import from `@ionic/angular`
+
+## Mobile App Features
+
+### Android
+- Native Android app
+- Camera permissions handled automatically
+- Can be published to Google Play Store
+- Supports all Android devices (API 21+)
+
+### iOS
+- Native iOS app
+- Camera permissions handled automatically
+- Can be published to Apple App Store
+- Supports iOS 13+
 
 ## Browser Compatibility
 
@@ -130,6 +197,7 @@ The app is built with Angular's standalone components, making it easy to extend:
 - Camera access requires HTTPS in production
 - User must grant camera permissions
 - Images are processed locally (no server upload)
+- Native app permissions are handled by the OS
 
 ## Contributing
 
@@ -149,7 +217,8 @@ For issues and questions:
 - Check browser console for errors
 - Ensure camera permissions are granted
 - Test on different devices and browsers
+- For mobile issues, check device logs
 
 ---
 
-**Note**: This app requires camera permissions and works best on mobile devices with HTTPS enabled.
+**Note**: This app requires camera permissions and works best on mobile devices. The native mobile app provides the best user experience compared to the web version.

@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 import { CameraService, OverlayImage } from '../../services/camera';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-camera-overlay',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IonicModule],
   templateUrl: './camera-overlay.html',
   styleUrl: './camera-overlay.scss'
 })
@@ -78,19 +79,24 @@ export class CameraOverlayComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  updateOverlayOpacity(overlay: OverlayImage, opacity: number): void {
+  updateOverlayOpacity(overlay: OverlayImage, value: any): void {
+    const opacity = typeof value === 'number' ? value : value?.lower || 0.5;
     this.cameraService.updateOverlayImage(overlay.id, { opacity });
   }
 
-  updateOverlayPosition(overlay: OverlayImage, x: number, y: number): void {
-    this.cameraService.updateOverlayImage(overlay.id, { position: { x, y } });
+  updateOverlayPosition(overlay: OverlayImage, x: any, y: any): void {
+    const posX = typeof x === 'number' ? x : parseInt(x) || 0;
+    const posY = typeof y === 'number' ? y : parseInt(y) || 0;
+    this.cameraService.updateOverlayImage(overlay.id, { position: { x: posX, y: posY } });
   }
 
-  updateOverlayScale(overlay: OverlayImage, scale: number): void {
+  updateOverlayScale(overlay: OverlayImage, value: any): void {
+    const scale = typeof value === 'number' ? value : value?.lower || 1;
     this.cameraService.updateOverlayImage(overlay.id, { scale });
   }
 
-  updateOverlayRotation(overlay: OverlayImage, rotation: number): void {
+  updateOverlayRotation(overlay: OverlayImage, value: any): void {
+    const rotation = typeof value === 'number' ? value : value?.lower || 0;
     this.cameraService.updateOverlayImage(overlay.id, { rotation });
   }
 
