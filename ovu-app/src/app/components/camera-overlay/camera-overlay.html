@@ -1,0 +1,158 @@
+<div class="camera-container">
+  <!-- Camera View -->
+  <div class="camera-view">
+    <video 
+      #videoElement 
+      autoplay 
+      playsinline 
+      muted
+      [class.active]="isCameraActive"
+      class="camera-video">
+    </video>
+    
+    <!-- Drawing Canvas -->
+    <canvas 
+      #canvasElement 
+      class="drawing-canvas"
+      [class.active]="isDrawingMode">
+    </canvas>
+    
+    <!-- Overlay Images -->
+    <div class="overlay-container">
+      <div 
+        *ngFor="let overlay of overlayImages" 
+        class="overlay-image"
+        [style.left.px]="overlay.position.x"
+        [style.top.px]="overlay.position.y"
+        [style.transform]="'scale(' + overlay.scale + ') rotate(' + overlay.rotation + 'deg)'"
+        [style.opacity]="overlay.opacity"
+        [class.selected]="selectedOverlay?.id === overlay.id"
+        (click)="selectOverlay(overlay)">
+        <img [src]="overlay.src" alt="Overlay">
+        <button 
+          class="remove-overlay" 
+          (click)="removeOverlay(overlay)"
+          title="Remove overlay">
+          ×
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <!-- Camera Controls -->
+    <div class="camera-controls">
+      <button 
+        class="control-btn primary"
+        (click)="isCameraActive ? stopCamera() : startCamera()">
+        {{ isCameraActive ? 'Stop Camera' : 'Start Camera' }}
+      </button>
+    </div>
+
+    <!-- Overlay Controls -->
+    <div class="overlay-controls" *ngIf="overlayImages.length > 0">
+      <h3>Overlay Controls</h3>
+      
+      <div class="overlay-list">
+        <div 
+          *ngFor="let overlay of overlayImages" 
+          class="overlay-item"
+          [class.selected]="selectedOverlay?.id === overlay.id"
+          (click)="selectOverlay(overlay)">
+          <img [src]="overlay.src" alt="Thumbnail">
+          <span>{{ overlay.id }}</span>
+        </div>
+      </div>
+
+      <!-- Selected Overlay Controls -->
+      <div class="selected-overlay-controls" *ngIf="selectedOverlay">
+        <h4>Adjust Overlay</h4>
+        
+        <div class="control-group">
+          <label>Opacity:</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="1" 
+            step="0.1"
+            [value]="selectedOverlay.opacity"
+            (input)="updateOverlayOpacity(selectedOverlay, $event.target.value)">
+          <span>{{ (selectedOverlay.opacity * 100) | number:'1.0-0' }}%</span>
+        </div>
+
+        <div class="control-group">
+          <label>Scale:</label>
+          <input 
+            type="range" 
+            min="0.1" 
+            max="3" 
+            step="0.1"
+            [value]="selectedOverlay.scale"
+            (input)="updateOverlayScale(selectedOverlay, $event.target.value)">
+          <span>{{ selectedOverlay.scale | number:'1.1-1' }}x</span>
+        </div>
+
+        <div class="control-group">
+          <label>Rotation:</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="360" 
+            step="1"
+            [value]="selectedOverlay.rotation"
+            (input)="updateOverlayRotation(selectedOverlay, $event.target.value)">
+          <span>{{ selectedOverlay.rotation }}°</span>
+        </div>
+
+        <div class="position-controls">
+          <label>Position:</label>
+          <div class="position-inputs">
+            <input 
+              type="number" 
+              placeholder="X"
+              [value]="selectedOverlay.position.x"
+              (input)="updateOverlayPosition(selectedOverlay, $event.target.value, selectedOverlay.position.y)">
+            <input 
+              type="number" 
+              placeholder="Y"
+              [value]="selectedOverlay.position.y"
+              (input)="updateOverlayPosition(selectedOverlay, selectedOverlay.position.x, $event.target.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawing Controls -->
+    <div class="drawing-controls">
+      <button 
+        class="control-btn"
+        [class.active]="isDrawingMode"
+        (click)="toggleDrawingMode()">
+        {{ isDrawingMode ? 'Disable Drawing' : 'Enable Drawing' }}
+      </button>
+      
+      <button 
+        class="control-btn"
+        (click)="clearDrawing()"
+        *ngIf="isDrawingMode">
+        Clear Drawing
+      </button>
+    </div>
+
+    <!-- Add Overlay -->
+    <div class="add-overlay">
+      <button 
+        class="control-btn secondary"
+        (click)="triggerFileInput()">
+        Add Overlay Image
+      </button>
+      <input 
+        #fileInput
+        type="file" 
+        accept="image/*" 
+        (change)="onFileSelected($event)"
+        style="display: none;">
+    </div>
+  </div>
+</div>
